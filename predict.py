@@ -2,6 +2,7 @@ import os
 from typing import Optional, List
 
 import torch
+import torch.nn as nn
 from torch import autocast
 from diffusers import PNDMScheduler, LMSDiscreteScheduler
 from PIL import Image
@@ -13,6 +14,14 @@ from image_to_image import (
     preprocess_mask,
 )
 
+def patch_conv(**patch):
+    cls = torch.nn.Conv2d
+    init = cls.__init__
+    def __init__(self, *args, **kwargs):
+        return init(self, *args, **kwargs, **patch)
+    cls.__init__ = __init__
+
+patch_conv(padding_mode='circular')
 
 MODEL_CACHE = "diffusers-cache"
 

@@ -3,7 +3,6 @@ from typing import List, Optional, Union, Tuple
 
 import numpy as np
 import torch
-
 from PIL import Image
 from diffusers import (
     AutoencoderKL,
