@@ -10,8 +10,8 @@ Then, you can run predictions:
 
     cog predict -i prompt="Stone wall trimsheet, quixel, substance designer, trending on artstation"
     
-    Output:
-    ![output](https://bafybeidpchqv4yoaxx7ik2i2bhb2yueflgx7rsgr6hu5aeifspvkt2znam.ipfs.w3s.link/output.0.png)
+ Output:
+ ![output](https://bafybeidpchqv4yoaxx7ik2i2bhb2yueflgx7rsgr6hu5aeifspvkt2znam.ipfs.w3s.link/output.0.png)
 
 Or, build a Docker image:
 
