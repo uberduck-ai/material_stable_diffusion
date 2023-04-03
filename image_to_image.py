@@ -51,7 +51,7 @@ class StableDiffusionImg2ImgPipeline(DiffusionPipeline):
         feature_extractor: CLIPFeatureExtractor,
     ):
         super().__init__()
-        scheduler = scheduler.set_format("pt")
+        # scheduler = scheduler.set_format("pt")
         self.register_modules(
             vae=vae,
             text_encoder=text_encoder,
@@ -194,21 +194,21 @@ class StableDiffusionImg2ImgPipeline(DiffusionPipeline):
         # scale and decode the image latents with vae
         latents = 1 / 0.18215 * latents
         image = self.vae.decode(latents)
-
+        # return image
         image = (image / 2 + 0.5).clamp(0, 1)
         image = image.cpu().permute(0, 2, 3, 1).numpy()
 
-        # run safety checker
-        safety_cheker_input = self.feature_extractor(
-            self.numpy_to_pil(image), return_tensors="pt"
-        ).to(self.device)
-        image, has_nsfw_concept = self.safety_checker(
-            images=image, clip_input=safety_cheker_input.pixel_values
-        )
+        # # run safety checker
+        # safety_cheker_input = self.feature_extractor(
+        #     self.numpy_to_pil(image), return_tensors="pt"
+        # ).to(self.device)
+        # image, has_nsfw_concept = self.safety_checker(
+        #     images=image, clip_input=safety_cheker_input.pixel_values
+        # )
 
         image = self.numpy_to_pil(image)
 
-        return {"sample": image, "nsfw_content_detected": has_nsfw_concept}
+        return {"image": image}
 
     def latents_from_init_image(
         self,
@@ -220,7 +220,7 @@ class StableDiffusionImg2ImgPipeline(DiffusionPipeline):
         generator: Optional[torch.Generator],
     ) -> Tuple[torch.FloatTensor, torch.FloatTensor, int]:
         # encode the init image into latents and scale the latents
-        init_latents = self.vae.encode(init_image.to(self.device)).sample()
+        init_latents = self.vae.encode(init_image.to(self.device))['latent_dist'].sample()
         init_latents = 0.18215 * init_latents
         init_latents_orig = init_latents
 
